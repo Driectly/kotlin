@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.cli.common.modules.ModuleBuilder;
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.kotlin.codegen.forTestCompile.ForTestCompileRuntime;
+import org.jetbrains.kotlin.config.CommonConfigurationKeys;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
 import org.jetbrains.kotlin.load.kotlin.ModuleVisibilityManager;
 import org.jetbrains.kotlin.load.kotlin.PackagePartClassUtils;
@@ -104,6 +105,7 @@ public abstract class AbstractCompileKotlinAgainstKotlinTest extends CodegenTest
                 createConfiguration(ConfigurationKind.ALL, getJdkKind(files),
                                     Collections.singletonList(KotlinTestUtils.getAnnotationsJar()),
                                     Collections.emptyList(), Collections.singletonList(testFile));
+        configuration.put(CommonConfigurationKeys.MODULE_NAME, "a");
 
         KotlinCoreEnvironment environment = KotlinCoreEnvironment.createForTests(
                 compileDisposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES);
@@ -113,14 +115,15 @@ public abstract class AbstractCompileKotlinAgainstKotlinTest extends CodegenTest
 
     @NotNull
     private ClassFileFactory compileB(@NotNull TestFile testFile, List<TestFile> files) throws IOException {
-        CompilerConfiguration configurationWithADirInClasspath =
+        CompilerConfiguration configuration =
                 createConfiguration(ConfigurationKind.ALL, getJdkKind(files),
                                     Lists.newArrayList(KotlinTestUtils.getAnnotationsJar(), aDir),
                                     Collections.emptyList(), Collections.singletonList(testFile));
+        configuration.put(CommonConfigurationKeys.MODULE_NAME, "b");
 
         Disposable compileDisposable = createDisposable("compileB");
         KotlinCoreEnvironment environment = KotlinCoreEnvironment.createForTests(
-                compileDisposable, configurationWithADirInClasspath, EnvironmentConfigFiles.JVM_CONFIG_FILES
+                compileDisposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES
         );
 
         return compileKotlin(testFile.name, testFile.content, bDir, environment, compileDisposable);

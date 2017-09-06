@@ -66,4 +66,12 @@ class JvmPackageTableTest : KtUsefulTestCase() {
     fun testSimple() {
         doTest("/jvmPackageTable/simple")
     }
+
+    fun testJvmPackageName() {
+        doTest("/jvmPackageTable/jvmPackageName")
+    }
+
+    fun testJvmPackageNameManyParts() {
+        doTest("/jvmPackageTable/jvmPackageNameManyParts")
+    }
 }
