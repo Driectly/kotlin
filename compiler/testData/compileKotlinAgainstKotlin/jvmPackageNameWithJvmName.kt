@@ -11,6 +11,7 @@ fun f() = "OK"
 var v: Int = 1
 
 // FILE: B.kt
+// LANGUAGE_VERSION: 1.2
 
 import foo.*
 
